@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-deployment
+  labels:
+    app: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      volumes:
+        - name: jenkins-storage
+          persistentVolumeClaim:
+           claimName: jenkins-volume-claim
+      containers:
+        - name: jenkins-container
+          image: jenkins/jenkins:lts
+          ports:
+            - containerPort: 8080
+              name: "http-server"
+            - containerPort: 50000
+              name: "remote-api"
+          volumeMounts:
+            - mountPath: "/var/jenkins_home"
+              name: jenkins-storage

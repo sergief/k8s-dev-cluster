@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sonar-deployment
+  labels:
+    app: sonar
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonar
+  template:
+    metadata:
+      labels:
+        app: sonar
+    spec:
+      volumes:
+        - name: sonar-storage
+          persistentVolumeClaim:
+           claimName: sonar-volume-claim
+      containers:
+        - name: sonar-container
+          image: sonarqube:lts
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1024Mi
+            limits:
+              cpu: 200Mi
+              memory: 2048Mi
+          ports:
+            - containerPort: 9000
+              name: "http-server"
+          volumeMounts:
+            - mountPath: "/opt/sonarqube/conf"
+              name: sonar-storage
+              subPath: conf
+            - mountPath: "/opt/sonarqube/data"
+              name: sonar-storage
+              subPath: data
+            - mountPath: "/opt/sonarqube/logs"
+              name: sonar-storage
+              subPath: logs
+            - mountPath: "/opt/sonarqube/extensions"
+              name: sonar-storage
+              subPath: extensions

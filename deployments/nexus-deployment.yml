@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nexus-deployment
+  labels:
+    app: nexus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nexus
+  template:
+    metadata:
+      labels:
+        app: nexus
+    spec:
+      securityContext:
+        runAsUser: 200
+        runAsGroup: 2000
+        fsGroup: 2000
+      volumes:
+        - name: nexus-storage
+          persistentVolumeClaim:
+           claimName: nexus-volume-claim
+      containers:
+        - name: nexus-container
+          image: sonatype/nexus3:latest
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1024Mi
+            limits:
+              cpu: 200Mi
+              memory: 1024Mi
+          env:
+          - name: INSTALL4J_ADD_VM_PARAMS
+            value: "-Xms512m -Xmx512m -XX:MaxDirectMemorySize=2g -Djava.util.prefs.userRoot=${NEXUS_DATA}/javaprefs"
+          ports:
+            - containerPort: 8081
+              name: "http-server"
+            - containerPort: 8123
+              name: "docker-repo"
+          volumeMounts:
+            - mountPath: "/nexus-data"
+              name: nexus-storage

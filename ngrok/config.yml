@@ -1,0 +1,6 @@
+tunnels:
+  githubWebhooks:
+    proto: http
+    addr: 192.168.99.103:80
+    host_header: jenkins.test
+    inspect: true

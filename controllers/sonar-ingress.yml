@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: sonar-web
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: sonar.test
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: sonar-service
+              servicePort: 9000

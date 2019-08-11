@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: nexus-web
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: nexus.test
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: nexus-service
+              servicePort: 8081
