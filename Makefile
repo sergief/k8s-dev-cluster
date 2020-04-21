@@ -1,7 +1,8 @@
 profile = k8s-dev-cluster
 
 start:
-	minikube start --memory 5120 --cpus 2 --profile $(profile)
+	minikube start --memory 5120 --cpus 2 --profile $(profile) --driver=virtualbox
+	minikube --profile $(profile) addons enable ingress
 
 stop:
 	minikube --profile $(profile) stop

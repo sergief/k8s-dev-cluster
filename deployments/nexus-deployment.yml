@@ -27,11 +27,11 @@ spec:
           image: sonatype/nexus3:latest
           resources:
             requests:
-              cpu: 500m
-              memory: 1024Mi
+              cpu: "500m"
+              memory: "1024Mi"
             limits:
-              cpu: 200Mi
-              memory: 1024Mi
+              cpu: "1000m"
+              memory: "1024Mi"
           env:
           - name: INSTALL4J_ADD_VM_PARAMS
             value: "-Xms512m -Xmx512m -XX:MaxDirectMemorySize=2g -Djava.util.prefs.userRoot=${NEXUS_DATA}/javaprefs"
